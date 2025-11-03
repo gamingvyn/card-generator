@@ -30,10 +30,17 @@
       font-size: 2rem;
       font-weight: bold;
       transition: transform 0.2s ease;
+      overflow: hidden;
     }
 
     .card.red {
       color: red;
+    }
+
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     button {
@@ -90,6 +97,14 @@
     const faceCards = ['J', 'Q', 'K'];
     const jokers = ['🃏'];
 
+    // Image URLs for face cards and joker
+    const faceImages = {
+      'J': 'https://upload.wikimedia.org/wikipedia/commons/2/22/Jack_of_spades2.svg',
+      'Q': 'https://upload.wikimedia.org/wikipedia/commons/4/4b/Queen_of_hearts2.svg',
+      'K': 'https://upload.wikimedia.org/wikipedia/commons/d/d3/King_of_diamonds2.svg',
+      '🃏': 'https://upload.wikimedia.org/wikipedia/commons/3/3b/Joker_black_2.svg'
+    };
+
     function generateCard() {
       const includeFaces = document.getElementById('includeFaces').checked;
       const includeJokers = document.getElementById('includeJokers').checked;
@@ -101,12 +116,21 @@
       const randomCard = possibleCards[Math.floor(Math.random() * possibleCards.length)];
       const cardDiv = document.getElementById('card');
 
+      // Joker card
       if (randomCard === '🃏') {
-        cardDiv.textContent = '🃏';
+        cardDiv.innerHTML = `<img src="${faceImages['🃏']}" alt="Joker card">`;
         cardDiv.className = 'card';
         return;
       }
 
+      // Face card (J, Q, K)
+      if (faceImages[randomCard]) {
+        cardDiv.innerHTML = `<img src="${faceImages[randomCard]}" alt="${randomCard} card">`;
+        cardDiv.className = 'card';
+        return;
+      }
+
+      // Number or Ace card
       const suit = suits[Math.floor(Math.random() * suits.length)];
       cardDiv.innerHTML = `${randomCard}${suit.symbol}`;
       cardDiv.className = 'card' + (suit.color === 'red' ? ' red' : '');
