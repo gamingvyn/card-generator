@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Card Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: radial-gradient(circle at top, #2b2b2b, #000);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      background: white;
+      color: black;
+      width: 120px;
+      height: 160px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: bold;
+      transition: transform 0.2s ease;
+    }
+
+    .card.red {
+      color: red;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: crimson;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: darkred;
+    }
+
+    .options {
+      margin-top: 15px;
+    }
+
+    label {
+      margin: 0 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="card" class="card">🃏</div>
+
+  <div class="options">
+    <label>
+      <input type="checkbox" id="includeFaces" checked>
+      Include face cards
+    </label>
+    <label>
+      <input type="checkbox" id="includeJokers">
+      Include jokers
+    </label>
+  </div>
+
+  <button onclick="generateCard()">Generate Card</button>
+
+  <script>
+    const suits = [
+      { symbol: '♠', color: 'black' },
+      { symbol: '♣', color: 'black' },
+      { symbol: '♥', color: 'red' },
+      { symbol: '♦', color: 'red' }
+    ];
+
+    const numbers = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+    const faceCards = ['J', 'Q', 'K'];
+    const jokers = ['🃏'];
+
+    function generateCard() {
+      const includeFaces = document.getElementById('includeFaces').checked;
+      const includeJokers = document.getElementById('includeJokers').checked;
+
+      const possibleCards = [...numbers];
+      if (includeFaces) possibleCards.push(...faceCards);
+      if (includeJokers) possibleCards.push(...jokers);
+
+      const randomCard = possibleCards[Math.floor(Math.random() * possibleCards.length)];
+      const cardDiv = document.getElementById('card');
+
+      if (randomCard === '🃏') {
+        cardDiv.textContent = '🃏';
+        cardDiv.className = 'card';
+        return;
+      }
+
+      const suit = suits[Math.floor(Math.random() * suits.length)];
+      cardDiv.innerHTML = `${randomCard}${suit.symbol}`;
+      cardDiv.className = 'card' + (suit.color === 'red' ? ' red' : '');
+    }
+  </script>
+
+</body>
+</html>
