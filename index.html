@@ -32,9 +32,7 @@
       overflow: hidden;
     }
 
-    .card.red {
-      color: red;
-    }
+    .card.red { color: red; }
 
     .card img {
       width: 100%;
@@ -55,9 +53,7 @@
       transition: background 0.2s;
     }
 
-    button:hover {
-      background: darkred;
-    }
+    button:hover { background: darkred; }
 
     .options {
       margin-top: 15px;
@@ -66,10 +62,6 @@
       align-items: center;
       gap: 6px;
     }
-
-    label {
-      margin: 0 10px;
-    }
   </style>
 </head>
 <body>
@@ -77,56 +69,24 @@
   <div id="card" class="card">🃏</div>
 
   <div class="options">
-    <label>
-      <input type="checkbox" id="includeFaces" checked>
-      Include face cards
-    </label>
-    <label>
-      <input type="checkbox" id="includeJokers">
-      Include jokers
-    </label>
-    <label>
-      <input type="checkbox" id="excludeNormal">
-      Exclude normal cards (A–10)
-    </label>
+    <label><input type="checkbox" id="includeFaces" checked> Include face cards</label>
+    <label><input type="checkbox" id="includeJokers"> Include jokers</label>
+    <label><input type="checkbox" id="excludeNormal"> Exclude normal cards (A–10)</label>
   </div>
 
   <button onclick="generateCard()">Generate Card</button>
 
   <script>
     const suits = [
-      { name: 'spades', symbol: '♠', color: 'black' },
-      { name: 'clubs', symbol: '♣', color: 'black' },
-      { name: 'hearts', symbol: '♥', color: 'red' },
-      { name: 'diamonds', symbol: '♦', color: 'red' }
+      { name: 'spades', symbol: '♠', color: 'black', code: 'S' },
+      { name: 'clubs', symbol: '♣', color: 'black', code: 'C' },
+      { name: 'hearts', symbol: '♥', color: 'red', code: 'H' },
+      { name: 'diamonds', symbol: '♦', color: 'red', code: 'D' }
     ];
 
     const numbers = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
     const faceCards = ['J', 'Q', 'K'];
     const jokers = ['🃏'];
-
-    // Card images hosted on jsDelivr (renders properly on GitHub Pages)
-    const faceImages = {
-      'J': {
-        spades: 'https://cdn.jsdelivr.net/gh/hayeah/playing-cards-assets/png/JS.png',
-        clubs: 'https://cdn.jsdelivr.net/gh/hayeah/playing-cards-assets/png/JC.png',
-        hearts: 'https://cdn.jsdelivr.net/gh/hayeah/playing-cards-assets/png/JH.png',
-        diamonds: 'https://cdn.jsdelivr.net/gh/hayeah/playing-cards-assets/png/JD.png'
-      },
-      'Q': {
-        spades: 'https://cdn.jsdelivr.net/gh/hayeah/playing-cards-assets/png/QS.png',
-        clubs: 'https://cdn.jsdelivr.net/gh/hayeah/playing-cards-assets/png/QC.png',
-        hearts: 'https://cdn.jsdelivr.net/gh/hayeah/playing-cards-assets/png/QH.png',
-        diamonds: 'https://cdn.jsdelivr.net/gh/hayeah/playing-cards-assets/png/QD.png'
-      },
-      'K': {
-        spades: 'https://cdn.jsdelivr.net/gh/hayeah/playing-cards-assets/png/KS.png',
-        clubs: 'https://cdn.jsdelivr.net/gh/hayeah/playing-cards-assets/png/KC.png',
-        hearts: 'https://cdn.jsdelivr.net/gh/hayeah/playing-cards-assets/png/KH.png',
-        diamonds: 'https://cdn.jsdelivr.net/gh/hayeah/playing-cards-assets/png/KD.png'
-      },
-      '🃏': 'https://cdn.jsdelivr.net/gh/hayeah/playing-cards-assets/png/JOKER.png'
-    };
 
     function generateCard() {
       const includeFaces = document.getElementById('includeFaces').checked;
@@ -140,32 +100,32 @@
       if (includeJokers) possibleCards.push(...jokers);
 
       if (possibleCards.length === 0) {
-        alert('No cards available! Enable at least one option.');
+        alert("No cards available! Enable at least one option.");
         return;
       }
 
       const randomCard = possibleCards[Math.floor(Math.random() * possibleCards.length)];
-      const cardDiv = document.getElementById('card');
       const suit = suits[Math.floor(Math.random() * suits.length)];
+      const cardDiv = document.getElementById("card");
 
       // Joker
-      if (randomCard === '🃏') {
-        cardDiv.innerHTML = `<img src="${faceImages['🃏']}" alt="Joker card">`;
-        cardDiv.className = 'card';
+      if (randomCard === "🃏") {
+        cardDiv.innerHTML = `<img src="https://deckofcardsapi.com/static/img/JOKER.png" alt="Joker">`;
+        cardDiv.className = "card";
         return;
       }
 
       // Face cards (J, Q, K)
-      if (faceImages[randomCard]) {
-        const imageURL = faceImages[randomCard][suit.name];
-        cardDiv.innerHTML = `<img src="${imageURL}" alt="${randomCard} of ${suit.name}">`;
-        cardDiv.className = 'card';
+      if (faceCards.includes(randomCard)) {
+        const imgURL = `https://deckofcardsapi.com/static/img/${randomCard}${suit.code}.png`;
+        cardDiv.innerHTML = `<img src="${imgURL}" alt="${randomCard} of ${suit.name}">`;
+        cardDiv.className = "card";
         return;
       }
 
       // Number or Ace cards
       cardDiv.innerHTML = `${randomCard}${suit.symbol}`;
-      cardDiv.className = 'card' + (suit.color === 'red' ? ' red' : '');
+      cardDiv.className = "card" + (suit.color === "red" ? " red" : "");
     }
   </script>
 
