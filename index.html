@@ -86,7 +86,7 @@
 
     const numbers = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
     const faceCards = ['J', 'Q', 'K'];
-    const jokers = ['🃏'];
+    const jokers = ['JOKER'];
 
     function generateCard() {
       const includeFaces = document.getElementById('includeFaces').checked;
@@ -108,22 +108,33 @@
       const suit = suits[Math.floor(Math.random() * suits.length)];
       const cardDiv = document.getElementById("card");
 
-      // Joker
-      if (randomCard === "🃏") {
-        cardDiv.innerHTML = `<img src="https://deckofcardsapi.com/static/img/JOKER.png" alt="Joker">`;
+      // Joker (text only)
+      if (randomCard === "JOKER") {
+        cardDiv.innerHTML = "🃏";
         cardDiv.className = "card";
         return;
       }
 
-      // Face cards (J, Q, K)
+      // Face cards use images
       if (faceCards.includes(randomCard)) {
-        const imgURL = `https://deckofcardsapi.com/static/img/${randomCard}${suit.code}.png`;
-        cardDiv.innerHTML = `<img src="${imgURL}" alt="${randomCard} of ${suit.name}">`;
-        cardDiv.className = "card";
+        const imgPath = `assets/${randomCard}${suit.code}.png`;
+        const img = new Image();
+        img.src = imgPath;
+
+        img.onload = () => {
+          cardDiv.innerHTML = `<img src="${imgPath}" alt="${randomCard} of ${suit.name}">`;
+          cardDiv.className = "card";
+        };
+
+        img.onerror = () => {
+          // fallback to text if missing image
+          cardDiv.innerHTML = `${randomCard}${suit.symbol}`;
+          cardDiv.className = "card" + (suit.color === "red" ? " red" : "");
+        };
         return;
       }
 
-      // Number or Ace cards
+      // Normal cards (text only)
       cardDiv.innerHTML = `${randomCard}${suit.symbol}`;
       cardDiv.className = "card" + (suit.color === "red" ? " red" : "");
     }
